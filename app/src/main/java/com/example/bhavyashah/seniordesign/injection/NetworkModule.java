@@ -29,7 +29,7 @@ public class NetworkModule {
     @Provides
     @Singleton
     public Gson providesGson() {
-        return new GsonBuilder().create();
+        return new GsonBuilder().setLenient().create();
     }
 
     @Provides
@@ -44,9 +44,9 @@ public class NetworkModule {
 
     @Provides
     @Singleton
-    public Retrofit providesRetrofit(Gson gson, OkHttpClient okHttpClient, SeniorDesignApplication application) {
+    public Retrofit providesRetrofit(Gson gson, OkHttpClient okHttpClient) {
         return new Retrofit.Builder()
-                .baseUrl("10.0.2.2")
+                .baseUrl("http://10.0.2.2:8080")
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .client(okHttpClient)

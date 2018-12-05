@@ -1,6 +1,7 @@
 package com.example.bhavyashah.seniordesign.injection;
 
 import com.example.bhavyashah.seniordesign.SeniorDesignApplication;
+import com.example.bhavyashah.seniordesign.managers.DevicesManager;
 
 import javax.inject.Singleton;
 
@@ -20,5 +21,11 @@ public class ApplicationModule {
     @Singleton
     public SeniorDesignApplication getApplication() {
         return mApplication;
+    }
+
+    @Provides
+    @Singleton
+    public DevicesManager providesDevicesManager() {
+        return new DevicesManager(mApplication.getApplicationContext());
     }
 }
