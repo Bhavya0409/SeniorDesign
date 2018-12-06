@@ -15,8 +15,7 @@
     <TextView
         android:id="@+id/devices_textview"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Hello"/>
+        android:layout_height="wrap_content"/>
 
 
 </LinearLayout>

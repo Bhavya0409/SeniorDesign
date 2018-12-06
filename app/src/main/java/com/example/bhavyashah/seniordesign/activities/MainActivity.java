@@ -12,11 +12,14 @@ import com.example.bhavyashah.seniordesign.SeniorDesignApplication;
 import com.example.bhavyashah.seniordesign.interfaces.BackendServiceSubscriber;
 import com.example.bhavyashah.seniordesign.managers.DevicesManager;
 
+import java.io.IOException;
+
 import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import okhttp3.ResponseBody;
 import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity {
@@ -41,20 +44,26 @@ public class MainActivity extends AppCompatActivity {
         devicesManager.getDevices(devicesCallback);
     }
 
-    private BackendServiceSubscriber<Response<String>> devicesCallback = new BackendServiceSubscriber<Response<String>>() {
+    private BackendServiceSubscriber<Response<ResponseBody>> devicesCallback = new BackendServiceSubscriber<Response<ResponseBody>>() {
 
-        private Response<String> mResponse;
+        private Response<ResponseBody> mResponse;
         @Override
         public void onCompleted() {
             if (mResponse.isSuccessful()) {
-                devicesTextView.setText(mResponse.body());
+                try {
+                    String test = mResponse.body().string();
+                    Log.i("blahblah",test);
+                    devicesTextView.setText(test);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             } else {
                 devicesTextView.setText("Error");
             }
         }
 
         @Override
-        public void onNext(Response<String> stringResponse) {
+        public void onNext(Response<ResponseBody> stringResponse) {
             mResponse = stringResponse;
         }
 

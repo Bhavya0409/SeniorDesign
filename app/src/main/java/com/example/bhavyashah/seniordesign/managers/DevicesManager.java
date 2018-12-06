@@ -24,19 +24,16 @@ public class DevicesManager {
         BaseObserver baseObserver = new BaseObserver(new BaseObserver.ObserverInterface() {
             @Override
             public void next(Response response) {
-                Log.i("blahblah", "in next" + response.message());
                 callback.onNext(response);
             }
 
             @Override
             public void error(Throwable throwable) {
-                Log.i("blahblah", "in error" + throwable.getMessage());
                 callback.onError(throwable);
             }
 
             @Override
             public void complete() {
-                Log.i("blahblah", "in complete");
                 callback.onCompleted();
             }
         });
