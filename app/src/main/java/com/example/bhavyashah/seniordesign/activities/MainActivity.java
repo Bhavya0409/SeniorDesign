@@ -7,19 +7,19 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.example.bhavyashah.seniordesign.Device;
 import com.example.bhavyashah.seniordesign.R;
 import com.example.bhavyashah.seniordesign.SeniorDesignApplication;
 import com.example.bhavyashah.seniordesign.interfaces.BackendServiceSubscriber;
 import com.example.bhavyashah.seniordesign.managers.DevicesManager;
 
-import java.io.IOException;
+import java.util.ArrayList;
 
 import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import okhttp3.ResponseBody;
 import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity {
@@ -40,30 +40,31 @@ public class MainActivity extends AppCompatActivity {
 
     @OnClick(R.id.get_devices_button)
     public void onClick(View v) {
-        Log.i("blahblah", "clicked");
-        devicesManager.getDevices(devicesCallback);
+        devicesManager.getMockDevices(devicesCallback);
     }
 
-    private BackendServiceSubscriber<Response<ResponseBody>> devicesCallback = new BackendServiceSubscriber<Response<ResponseBody>>() {
+    private BackendServiceSubscriber<Response<ArrayList<Device>>> devicesCallback = new BackendServiceSubscriber<Response<ArrayList<Device>>>() {
 
-        private Response<ResponseBody> mResponse;
+        private Response<ArrayList<Device>> mResponse;
         @Override
         public void onCompleted() {
             if (mResponse.isSuccessful()) {
-                try {
-                    String test = mResponse.body().string();
-                    Log.i("blahblah",test);
-                    devicesTextView.setText(test);
-                } catch (IOException e) {
-                    e.printStackTrace();
+                ArrayList<Device> devices = mResponse.body();
+                for (Device device : devices)
+                {
+                    Log.i("blahblah name", device.getMacAddress());
+                    Log.i("blahblah ul", device.getUploadData());
+                    Log.i("blahblah dl", device.getDownloadData());
+                    Log.i("blahblah last", device.getLastContact());
                 }
+                devicesTextView.setText(devices.get(0).getMacAddress());
             } else {
                 devicesTextView.setText("Error");
             }
         }
 
         @Override
-        public void onNext(Response<ResponseBody> stringResponse) {
+        public void onNext(Response<ArrayList<Device>> stringResponse) {
             mResponse = stringResponse;
         }
 

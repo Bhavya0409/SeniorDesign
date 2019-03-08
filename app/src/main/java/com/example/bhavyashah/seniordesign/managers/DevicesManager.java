@@ -1,7 +1,6 @@
 package com.example.bhavyashah.seniordesign.managers;
 
 import android.content.Context;
-import android.util.Log;
 
 import com.example.bhavyashah.seniordesign.SeniorDesignApplication;
 import com.example.bhavyashah.seniordesign.interfaces.BackendServiceSubscriber;
@@ -39,6 +38,30 @@ public class DevicesManager {
         });
 
         mServices.getDevices()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(baseObserver);
+    }
+
+    public void getMockDevices(final BackendServiceSubscriber callback) {
+        BaseObserver baseObserver = new BaseObserver(new BaseObserver.ObserverInterface() {
+            @Override
+            public void next(Response response) {
+                callback.onNext(response);
+            }
+
+            @Override
+            public void error(Throwable throwable) {
+                callback.onError(throwable);
+            }
+
+            @Override
+            public void complete() {
+                callback.onCompleted();
+            }
+        });
+
+        mServices.getMockDevices()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(baseObserver);

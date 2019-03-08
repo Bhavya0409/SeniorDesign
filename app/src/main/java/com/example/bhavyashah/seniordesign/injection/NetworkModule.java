@@ -23,6 +23,8 @@ public class NetworkModule {
 
     private SeniorDesignApplication mApplication;
 
+    private String REMOTE_IP_ADDRESS = "http://192.168.1.9:8080";
+
     public NetworkModule(SeniorDesignApplication app) {
         this.mApplication = app;
     }
@@ -47,7 +49,7 @@ public class NetworkModule {
     @Singleton
     public Retrofit providesRetrofit(Gson gson, OkHttpClient okHttpClient) {
         return new Retrofit.Builder()
-                .baseUrl("http://10.0.2.2:8080")
+                .baseUrl(REMOTE_IP_ADDRESS)
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
