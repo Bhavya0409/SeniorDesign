@@ -23,7 +23,7 @@ public class NetworkModule {
 
     private SeniorDesignApplication mApplication;
 
-    private String REMOTE_IP_ADDRESS = "http://192.168.1.9:8080";
+    private String REMOTE_IP_ADDRESS = "http://192.168.1.14:8080";
 
     public NetworkModule(SeniorDesignApplication app) {
         this.mApplication = app;

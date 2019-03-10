@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
+        android:paddingLeft="?android:attr/expandableListPreferredChildPaddingLeft"
+        tools:ignore="RtlHardcoded,RtlSymmetry">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="MAC Address:"
+            android:textSize="16sp"
+            android:layout_marginRight="10dp"
+            tools:ignore="RtlHardcoded,RtlSymmetry"/>
+
+        <TextView
+            android:id="@+id/device_mac_address"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:text="test"
+            tools:ignore="RtlHardcoded,RtlSymmetry" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
+        android:paddingLeft="?android:attr/expandableListPreferredChildPaddingLeft"
+        tools:ignore="RtlHardcoded,RtlSymmetry">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="IP Address:"
+            android:textSize="16sp"
+            android:layout_marginRight="10dp"
+            tools:ignore="RtlHardcoded,RtlSymmetry"/>
+
+        <TextView
+            android:id="@+id/device_ip_address"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:text="test"
+            tools:ignore="RtlHardcoded,RtlSymmetry" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
+        android:paddingLeft="?android:attr/expandableListPreferredChildPaddingLeft"
+        tools:ignore="RtlHardcoded,RtlSymmetry">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Upload Data:"
+            android:textSize="16sp"
+            android:layout_marginRight="10dp"
+            tools:ignore="RtlHardcoded,RtlSymmetry"/>
+
+        <TextView
+            android:id="@+id/device_ul_data"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:text="test"
+            tools:ignore="RtlHardcoded,RtlSymmetry" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="kb/s"
+            android:textSize="16sp"
+            android:layout_marginLeft="6dp"
+            tools:ignore="RtlHardcoded,RtlSymmetry"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
+        android:paddingLeft="?android:attr/expandableListPreferredChildPaddingLeft"
+        tools:ignore="RtlHardcoded,RtlSymmetry">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Download Data:"
+            android:textSize="16sp"
+            android:layout_marginRight="10dp"
+            tools:ignore="RtlHardcoded,RtlSymmetry"/>
+
+        <TextView
+            android:id="@+id/device_dl_data"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:text="test"
+            tools:ignore="RtlHardcoded,RtlSymmetry" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="kb/s"
+            android:textSize="16sp"
+            android:layout_marginLeft="6dp"
+            tools:ignore="RtlHardcoded,RtlSymmetry"/>
+
+    </LinearLayout>
+
+</LinearLayout>
