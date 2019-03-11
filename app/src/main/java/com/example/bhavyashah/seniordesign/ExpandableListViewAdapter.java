@@ -11,6 +11,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.example.bhavyashah.seniordesign.interfaces.BackendServiceSubscriber;
+import com.example.bhavyashah.seniordesign.interfaces.OnSubmitListener;
 import com.example.bhavyashah.seniordesign.managers.DevicesManager;
 
 import java.util.HashMap;
@@ -27,12 +28,18 @@ public class ExpandableListViewAdapter extends BaseExpandableListAdapter {
     private Context context;
     private List<String> dataHeaders;
     private HashMap<String, Device> devices;
-    private String newName = "";
+    private OnSubmitListener listener;
 
-    public ExpandableListViewAdapter(Context context, List<String> dataHeaders, HashMap<String, Device> devices) {
+    private String newName = "";
+    private Button buttonClicked;
+    private EditText deviceNameEditText;
+    private int groupPositionOfDeviceNameChange;
+
+    public ExpandableListViewAdapter(Context context, List<String> dataHeaders, HashMap<String, Device> devices, OnSubmitListener listener) {
         this.context = context;
         this.dataHeaders = dataHeaders;
         this.devices = devices;
+        this.listener = listener;
 
         ((SeniorDesignApplication)context.getApplicationContext()).getApplicationComponent().inject(this);
     }
@@ -86,7 +93,7 @@ public class ExpandableListViewAdapter extends BaseExpandableListAdapter {
     }
 
     @Override
-    public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
+    public View getChildView(final int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
         final Device device = getChild(groupPosition, childPosition);
         if (convertView == null) {
             LayoutInflater infalInflater = (LayoutInflater) this.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -106,6 +113,10 @@ public class ExpandableListViewAdapter extends BaseExpandableListAdapter {
         changeDeviceName.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                buttonClicked = (Button)v;
+                deviceNameEditText = newDeviceName;
+                groupPositionOfDeviceNameChange = groupPosition;
+
                 newName = newDeviceName.getText().toString();
                 Device newNameDevice = new Device();
                 newNameDevice.setName(newName);
@@ -130,8 +141,11 @@ public class ExpandableListViewAdapter extends BaseExpandableListAdapter {
         @Override
         public void onCompleted() {
             if (mResponse.isSuccessful()) {
-                //TODO unblock button and close section
-                Log.i("blahblah", "success");
+                buttonClicked.setAlpha(1f);
+                buttonClicked.setClickable(true);
+                buttonClicked.setText("Set");
+                deviceNameEditText.setText("");
+                listener.onSubmit(groupPositionOfDeviceNameChange, newName);
             } else {
                 Log.i("blahblah", "failure");
             }

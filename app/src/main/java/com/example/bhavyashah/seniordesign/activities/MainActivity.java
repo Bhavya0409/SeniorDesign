@@ -14,6 +14,7 @@ import com.example.bhavyashah.seniordesign.ExpandableListViewAdapter;
 import com.example.bhavyashah.seniordesign.R;
 import com.example.bhavyashah.seniordesign.SeniorDesignApplication;
 import com.example.bhavyashah.seniordesign.interfaces.BackendServiceSubscriber;
+import com.example.bhavyashah.seniordesign.interfaces.OnSubmitListener;
 import com.example.bhavyashah.seniordesign.managers.DevicesManager;
 
 import java.util.ArrayList;
@@ -27,7 +28,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import retrofit2.Response;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements OnSubmitListener {
 
     @BindView(R.id.get_devices_button) Button getDevicesButton;
     @BindView(R.id.devices_error_text) TextView devicesTextView;
@@ -50,7 +51,7 @@ public class MainActivity extends AppCompatActivity {
 
         headers = new ArrayList<>();
         devices = new HashMap<>();
-        adapter = new ExpandableListViewAdapter(this, headers, devices);
+        adapter = new ExpandableListViewAdapter(this, headers, devices, this);
         expandableListView.setAdapter(adapter);
     }
 
@@ -93,4 +94,12 @@ public class MainActivity extends AppCompatActivity {
             Log.i("Error", e.toString());
         }
     };
+
+    @Override
+    public void onSubmit(int groupPosition, String newName) {
+        expandableListView.collapseGroup(groupPosition);
+        String oldName = headers.get(groupPosition);
+        headers.set(groupPosition, newName);
+        devices.put(newName, devices.remove(oldName));
+    }
 }
