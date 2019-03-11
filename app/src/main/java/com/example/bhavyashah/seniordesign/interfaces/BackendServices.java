@@ -6,7 +6,9 @@ import java.util.ArrayList;
 
 import io.reactivex.Observable;
 import retrofit2.Response;
+import retrofit2.http.Body;
 import retrofit2.http.GET;
+import retrofit2.http.POST;
 
 public interface BackendServices {
     @GET("/app/devices")
@@ -14,4 +16,7 @@ public interface BackendServices {
 
     @GET("/app/fakedata")
     Observable<Response<ArrayList<Device>>> getMockDevices();
+
+    @POST("/app/namechange")
+    Observable<Response<String>> changeName(@Body Device device);
 }

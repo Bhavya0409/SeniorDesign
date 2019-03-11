@@ -3,6 +3,9 @@ package com.example.bhavyashah.seniordesign;
 import com.google.gson.annotations.SerializedName;
 
 public class Device {
+    @SerializedName("Name")
+    private String name;
+
     @SerializedName("mac_address")
     private String macAddress;
 
@@ -37,5 +40,17 @@ public class Device {
 
     public String getLastContact() {
         return lastContact;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setMacAddress(String macAddress) {
+        this.macAddress = macAddress;
     }
 }

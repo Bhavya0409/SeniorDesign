@@ -129,4 +129,24 @@
 
     </LinearLayout>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingLeft="?android:attr/expandableListPreferredChildPaddingLeft"
+        android:paddingRight="?android:attr/expandableListPreferredChildPaddingLeft">
+
+        <EditText
+            android:id="@+id/new_device_name"
+            android:layout_width="0dp"
+            android:hint="Change Device Name"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"/>
+        <Button
+            android:id="@+id/change_device_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Set"/>
+    </LinearLayout>
+
 </LinearLayout>

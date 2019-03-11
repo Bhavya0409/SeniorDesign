@@ -1,25 +1,40 @@
 package com.example.bhavyashah.seniordesign;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
+
+import com.example.bhavyashah.seniordesign.interfaces.BackendServiceSubscriber;
+import com.example.bhavyashah.seniordesign.managers.DevicesManager;
 
 import java.util.HashMap;
 import java.util.List;
 
+import javax.inject.Inject;
+
+import retrofit2.Response;
+
 public class ExpandableListViewAdapter extends BaseExpandableListAdapter {
+
+    @Inject DevicesManager devicesManager;
 
     private Context context;
     private List<String> dataHeaders;
     private HashMap<String, Device> devices;
+    private String newName = "";
 
     public ExpandableListViewAdapter(Context context, List<String> dataHeaders, HashMap<String, Device> devices) {
         this.context = context;
         this.dataHeaders = dataHeaders;
         this.devices = devices;
+
+        ((SeniorDesignApplication)context.getApplicationContext()).getApplicationComponent().inject(this);
     }
 
     @Override
@@ -72,7 +87,7 @@ public class ExpandableListViewAdapter extends BaseExpandableListAdapter {
 
     @Override
     public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
-        Device device = getChild(groupPosition, childPosition);
+        final Device device = getChild(groupPosition, childPosition);
         if (convertView == null) {
             LayoutInflater infalInflater = (LayoutInflater) this.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = infalInflater.inflate(R.layout.content, null);
@@ -81,10 +96,26 @@ public class ExpandableListViewAdapter extends BaseExpandableListAdapter {
         TextView ipAddress = convertView.findViewById(R.id.device_ip_address);
         TextView ulData = convertView.findViewById(R.id.device_ul_data);
         TextView dlData = convertView.findViewById(R.id.device_dl_data);
+        Button changeDeviceName = convertView.findViewById(R.id.change_device_name);
+        final EditText newDeviceName = convertView.findViewById(R.id.new_device_name);
+
         macAddress.setText(device.getMacAddress());
         ipAddress.setText(device.getIpAddress());
         ulData.setText(device.getUploadData());
         dlData.setText(device.getDownloadData());
+        changeDeviceName.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                newName = newDeviceName.getText().toString();
+                Device newNameDevice = new Device();
+                newNameDevice.setName(newName);
+                newNameDevice.setMacAddress(device.getMacAddress());
+                v.setAlpha(.5f);
+                ((Button)v).setText("Setting...");
+                v.setClickable(false);
+                devicesManager.setDeviceName(newNameDevice, changeDeviceNameCallback);
+            }
+        });
         return convertView;
     }
 
@@ -92,4 +123,28 @@ public class ExpandableListViewAdapter extends BaseExpandableListAdapter {
     public boolean isChildSelectable(int groupPosition, int childPosition) {
         return false;
     }
+
+    private BackendServiceSubscriber<Response<String>> changeDeviceNameCallback = new BackendServiceSubscriber<Response<String>>() {
+
+        private Response<String> mResponse;
+        @Override
+        public void onCompleted() {
+            if (mResponse.isSuccessful()) {
+                //TODO unblock button and close section
+                Log.i("blahblah", "success");
+            } else {
+                Log.i("blahblah", "failure");
+            }
+        }
+
+        @Override
+        public void onNext(Response<String> stringResponse) {
+            mResponse = stringResponse;
+        }
+
+        @Override
+        public void onError(Throwable e) {
+            Log.i("Error", e.toString());
+        }
+    };
 }
