@@ -1,7 +1,7 @@
 package com.example.bhavyashah.seniordesign.injection;
 
 import com.example.bhavyashah.seniordesign.ExpandableListViewAdapter;
-import com.example.bhavyashah.seniordesign.activities.MainActivity;
+import com.example.bhavyashah.seniordesign.fragments.RouterFragment;
 import com.example.bhavyashah.seniordesign.managers.DevicesManager;
 
 import javax.inject.Singleton;
@@ -12,7 +12,7 @@ import dagger.Component;
 @Component(modules = {ApplicationModule.class, NetworkModule.class})
 public interface ApplicationComponent {
 
-    void inject(MainActivity mainActivity);
+    void inject(RouterFragment routerFragment);
 
     void inject(DevicesManager devicesManager);
 

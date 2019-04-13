@@ -3,7 +3,7 @@ package com.example.bhavyashah.seniordesign;
 import com.google.gson.annotations.SerializedName;
 
 public class Device {
-    @SerializedName("Name")
+    @SerializedName("name")
     private String name;
 
     @SerializedName("mac_address")
