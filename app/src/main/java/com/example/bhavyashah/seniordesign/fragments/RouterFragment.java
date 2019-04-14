@@ -1,49 +1,34 @@
 package com.example.bhavyashah.seniordesign.fragments;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.ExpandableListView;
-import android.widget.ProgressBar;
-import android.widget.TextView;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 
-import com.example.bhavyashah.seniordesign.Device;
-import com.example.bhavyashah.seniordesign.ExpandableListViewAdapter;
 import com.example.bhavyashah.seniordesign.R;
 import com.example.bhavyashah.seniordesign.SeniorDesignApplication;
-import com.example.bhavyashah.seniordesign.interfaces.BackendServiceSubscriber;
-import com.example.bhavyashah.seniordesign.interfaces.OnSubmitListener;
-import com.example.bhavyashah.seniordesign.managers.DevicesManager;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-
-import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import retrofit2.Response;
 
-public class RouterFragment extends Fragment implements OnSubmitListener {
+public class RouterFragment extends Fragment {
 
-    @BindView(R.id.get_devices_button) Button getDevicesButton;
-    @BindView(R.id.devices_error_text) TextView devicesTextView;
-    @BindView(R.id.devices_list) ExpandableListView expandableListView;
-    @BindView(R.id.progress_bar) ProgressBar progressBar;
+    @BindView(R.id.qdisc_spinner) Spinner qdiscSpinner;
+    @BindView(R.id.rate_selection_spinner) Spinner rateSelectionSpinner;
 
-    @Inject DevicesManager devicesManager;
-
-    private ExpandableListViewAdapter adapter;
-    private static List<String> headers = new ArrayList<>();
-    private static HashMap<String, Device> devices = new HashMap<>();
+    private int qdisc = 0;
+    private String rate = "";
 
     @Nullable
     @Override
@@ -51,59 +36,60 @@ public class RouterFragment extends Fragment implements OnSubmitListener {
         View view = inflater.inflate(R.layout.router_fragment, container, false);
         ButterKnife.bind(this, view);
 
-
         ((SeniorDesignApplication)getActivity().getApplicationContext()).getApplicationComponent().inject(this);
 
-        adapter = new ExpandableListViewAdapter(getActivity(), headers, devices, this);
-        expandableListView.setAdapter(adapter);
+        setQdiscSpinner(getActivity());
+        setRateSelectionSpinner(getActivity());
+
         return view;
     }
 
-    @OnClick(R.id.get_devices_button)
-    public void onClick(View v) {
-        headers.clear();
-        devices.clear();
-        adapter.notifyDataSetChanged();
-        progressBar.setVisibility(View.VISIBLE);
-        devicesManager.getDevices(devicesCallback);
-    }
-
-    @Override
-    public void onSubmit(int groupPosition, String newName) {
-        expandableListView.collapseGroup(groupPosition);
-        String oldName = headers.get(groupPosition);
-        headers.set(groupPosition, newName);
-        devices.put(newName, devices.remove(oldName));
-    }
-
-    private BackendServiceSubscriber<Response<ArrayList<Device>>> devicesCallback = new BackendServiceSubscriber<Response<ArrayList<Device>>>() {
-
-        private Response<ArrayList<Device>> mResponse;
-        @Override
-        public void onCompleted() {
-            progressBar.setVisibility(View.GONE);
-            if (mResponse.isSuccessful()) {
-                ArrayList<Device> devicesResponse = mResponse.body();
-                for (Device device : devicesResponse) {
-                    headers.add(device.getName());
-                    devices.put(device.getName(), device);
+    private void setQdiscSpinner(Context context) {
+        String qdiscs[] = {"Default", "Smooth Traffic", "Random Classful"};
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(context, android.R.layout.simple_spinner_item, qdiscs);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        qdiscSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                qdisc = position;
+                if (position == 1) {
+                    rateSelectionSpinner.setEnabled(true);
+                    rateSelectionSpinner.setClickable(true);
+                } else {
+                    rateSelectionSpinner.setEnabled(false);
+                    rateSelectionSpinner.setClickable(false);
                 }
-                adapter.notifyDataSetChanged();
-            } else {
-                devicesTextView.setText("Couldn't get data. Please try again another time.");
             }
-        }
 
-        @Override
-        public void onNext(Response<ArrayList<Device>> stringResponse) {
-            mResponse = stringResponse;
-        }
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
 
-        @Override
-        public void onError(Throwable e) {
-            progressBar.setVisibility(View.GONE);
-            devicesTextView.setText("Something went wrong...");
-            Log.i("Error", e.toString());
-        }
-    };
+            }
+        });
+        qdiscSpinner.setAdapter(adapter);
+    }
+
+    private void setRateSelectionSpinner(Context context) {
+        String rates[] = {"5", "10", "15"};
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(context, android.R.layout.simple_spinner_item, rates);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        rateSelectionSpinner.setAdapter(adapter);
+        rateSelectionSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                rate = (String) parent.getItemAtPosition(position);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+    }
+
+    @OnClick(R.id.update_settings)
+    public void onClick(View v) {
+
+    }
+
 }

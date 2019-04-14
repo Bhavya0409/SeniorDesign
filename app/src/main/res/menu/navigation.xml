@@ -2,13 +2,13 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/navigation_router"
-        android:icon="@drawable/ic_home_black_24dp"
-        android:title="@string/router" />
-
-    <item
         android:id="@+id/navigation_devices"
         android:icon="@drawable/ic_dashboard_black_24dp"
         android:title="@string/devices" />
+
+    <item
+        android:id="@+id/navigation_router"
+        android:icon="@drawable/ic_home_black_24dp"
+        android:title="@string/router" />
 
 </menu>

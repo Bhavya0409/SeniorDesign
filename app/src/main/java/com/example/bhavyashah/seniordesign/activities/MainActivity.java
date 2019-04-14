@@ -9,6 +9,7 @@ import android.view.MenuItem;
 import android.widget.FrameLayout;
 
 import com.example.bhavyashah.seniordesign.R;
+import com.example.bhavyashah.seniordesign.fragments.DevicesFragment;
 import com.example.bhavyashah.seniordesign.fragments.RouterFragment;
 
 import butterknife.BindView;
@@ -25,7 +26,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
-        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new RouterFragment()).commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new DevicesFragment()).commit();
 
         bottomNav.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -37,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
                         selectedFragment = new RouterFragment();
                         break;
                     case R.id.navigation_devices:
-                        selectedFragment = new RouterFragment();
+                        selectedFragment = new DevicesFragment();
                         break;
                 }
 
