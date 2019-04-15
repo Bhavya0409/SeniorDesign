@@ -5,27 +5,41 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
+import android.widget.TextView;
 
+import com.example.bhavyashah.seniordesign.QueueDisc;
 import com.example.bhavyashah.seniordesign.R;
 import com.example.bhavyashah.seniordesign.SeniorDesignApplication;
+import com.example.bhavyashah.seniordesign.interfaces.BackendServiceSubscriber;
+import com.example.bhavyashah.seniordesign.managers.RouterManager;
 
-import java.util.ArrayList;
-import java.util.List;
+
+
+import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import retrofit2.Response;
 
 public class RouterFragment extends Fragment {
 
     @BindView(R.id.qdisc_spinner) Spinner qdiscSpinner;
     @BindView(R.id.rate_selection_spinner) Spinner rateSelectionSpinner;
+    @BindView(R.id.update_settings) Button updateSettingsButton;
+    @BindView(R.id.progress_bar) ProgressBar progressBar;
+    @BindView(R.id.status_text) TextView statusText;
+
+    @Inject RouterManager routerManager;
 
     private int qdisc = 0;
     private String rate = "";
@@ -89,7 +103,42 @@ public class RouterFragment extends Fragment {
 
     @OnClick(R.id.update_settings)
     public void onClick(View v) {
-
+        updateSettingsButton.setEnabled(false);
+        updateSettingsButton.setClickable(false);
+        updateSettingsButton.setText("Updating...");
+        statusText.setVisibility(View.GONE);
+        progressBar.setVisibility(View.VISIBLE);
+        String type = (qdisc == 0 || qdisc == 1) ? "ql" : "qf";
+        String qdiscs[] = {"pfifo", "tbf", "htb"};
+        routerManager.setDisc(setQueueDiscCallback, new QueueDisc(type, qdiscs[qdisc], (qdisc == 0 || qdisc == 2) ? "" : String.valueOf(rate)));
     }
 
+    private void reset() {
+        updateSettingsButton.setEnabled(true);
+        updateSettingsButton.setClickable(true);
+        updateSettingsButton.setText("Update");
+        statusText.setVisibility(View.VISIBLE);
+        progressBar.setVisibility(View.GONE);
+    }
+
+    private BackendServiceSubscriber<Response<String>> setQueueDiscCallback = new BackendServiceSubscriber<Response<String>>() {
+        private Response<String> mResponse;
+        @Override
+        public void onCompleted() {
+            statusText.setText("Success!");
+            reset();
+        }
+
+        @Override
+        public void onNext(Response<String> stringResponse) {
+            mResponse = stringResponse;
+        }
+
+        @Override
+        public void onError(Throwable e) {
+            statusText.setText("Something went wrong...");
+            reset();
+            Log.i("Error", e.toString());
+        }
+    };
 }
