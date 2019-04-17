@@ -21,6 +21,15 @@ public class Device {
     @SerializedName("last_contact")
     private String lastContact;
 
+    @SerializedName("class_rate")
+    private int classRate;
+
+    @SerializedName("class_ceiling")
+    private int classCeiling;
+
+    @SerializedName("class_priority")
+    private int classPriority;
+
     public String getMacAddress() {
         return macAddress;
     }
@@ -38,12 +47,20 @@ public class Device {
         return downloadData;
     }
 
-    public String getLastContact() {
-        return lastContact;
-    }
-
     public String getName() {
         return name;
+    }
+
+    public int getClassRate() {
+        return classRate;
+    }
+
+    public int getClassCeiling() {
+        return classCeiling;
+    }
+
+    public int getClassPriority() {
+        return classPriority;
     }
 
     public void setName(String name) {

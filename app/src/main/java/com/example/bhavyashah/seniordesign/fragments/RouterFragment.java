@@ -48,7 +48,7 @@ public class RouterFragment extends Fragment {
     String qdiscs[] = {"Default", "Smooth Traffic", "Random Classful"};
     String rates[] = {"5", "10", "15", "20", "25"};
 
-    private int qdisc = 0;
+    public static int qdisc = 0;
     private String rate = "";
 
     @Nullable
@@ -107,7 +107,8 @@ public class RouterFragment extends Fragment {
     }
 
     @OnClick(R.id.update_settings)
-    public void onClick(View v) {
+    public void onClick() {
+        updateSettingsButton.setAlpha(.5f);
         updateSettingsButton.setEnabled(false);
         updateSettingsButton.setClickable(false);
         updateSettingsButton.setText("Updating...");
@@ -118,6 +119,7 @@ public class RouterFragment extends Fragment {
     }
 
     private void reset() {
+        updateSettingsButton.setAlpha(1f);
         updateSettingsButton.setEnabled(true);
         updateSettingsButton.setClickable(true);
         updateSettingsButton.setText("Update");

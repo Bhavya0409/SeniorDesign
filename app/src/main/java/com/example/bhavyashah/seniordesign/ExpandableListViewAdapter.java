@@ -8,12 +8,16 @@ import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.SeekBar;
 import android.widget.TextView;
 
+import com.example.bhavyashah.seniordesign.fragments.RouterFragment;
 import com.example.bhavyashah.seniordesign.interfaces.BackendServiceSubscriber;
 import com.example.bhavyashah.seniordesign.interfaces.OnSubmitListener;
 import com.example.bhavyashah.seniordesign.managers.DevicesManager;
 import com.example.bhavyashah.seniordesign.models.Device;
+import com.example.bhavyashah.seniordesign.models.DeviceDisc;
 
 import java.util.HashMap;
 import java.util.List;
@@ -33,7 +37,7 @@ public class ExpandableListViewAdapter extends BaseExpandableListAdapter {
 
     private String newName = "";
     private Button buttonClicked;
-    private EditText deviceNameEditText;
+    private TextView statusText;
     private int groupPositionOfDeviceNameChange;
 
     public ExpandableListViewAdapter(Context context, List<String> dataHeaders, HashMap<String, Device> devices, OnSubmitListener listener) {
@@ -104,7 +108,130 @@ public class ExpandableListViewAdapter extends BaseExpandableListAdapter {
         TextView ipAddress = convertView.findViewById(R.id.device_ip_address);
         TextView ulData = convertView.findViewById(R.id.device_ul_data);
         TextView dlData = convertView.findViewById(R.id.device_dl_data);
+        statusText = convertView.findViewById(R.id.status_text);
+
         Button changeDeviceName = convertView.findViewById(R.id.change_device_name);
+        Button updateDeviceQdisc = convertView.findViewById(R.id.update_device_qdisc);
+
+        LinearLayout deviceQueueDisc = convertView.findViewById(R.id.device_queue_disc);
+
+        if (RouterFragment.qdisc == 2) {
+            deviceQueueDisc.setVisibility(View.VISIBLE);
+            final TextView ratePercent = convertView.findViewById(R.id.rate_percent);
+            final TextView ceilingPercent = convertView.findViewById(R.id.ceiling_percent);
+            final TextView priorityPercent = convertView.findViewById(R.id.priority_percent);
+
+            final TextView ratePercentSign = convertView.findViewById(R.id.rate_percent_sign);
+            final TextView ceilingPercentSign = convertView.findViewById(R.id.ceiling_percent_sign);
+
+            final SeekBar rateSeekbar = convertView.findViewById(R.id.rate_seekbar);
+            final SeekBar ceilingSeekbar = convertView.findViewById(R.id.ceiling_seekbar);
+            final SeekBar prioritySeekbar = convertView.findViewById(R.id.priority_seekbar);
+
+            int classRate = device.getClassRate();
+
+            if (classRate == -1) {
+                ratePercent.setText("Please select a rate as a percentage.");
+                ratePercentSign.setVisibility(View.GONE);
+            } else {
+                ratePercent.setText(String.valueOf(classRate));
+                rateSeekbar.setProgress(classRate);
+            }
+
+            int classCeiling = device.getClassCeiling();
+
+            if (classCeiling == -1) {
+                ceilingPercent.setText("Please select a ceiling as a percentage.");
+                ceilingPercentSign.setVisibility(View.GONE);
+            } else {
+                ceilingPercent.setText(String.valueOf(classCeiling));
+                ceilingSeekbar.setProgress(classCeiling);
+            }
+
+            int classPriority = device.getClassPriority();
+
+            if (classPriority == -1) {
+                priorityPercent.setText("Please select a priority on a scale from 0 - 9.");
+            } else {
+                priorityPercent.setText(String.valueOf(classPriority));
+                prioritySeekbar.setProgress(classPriority);
+            }
+
+            rateSeekbar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+                @Override
+                public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                    ratePercent.setText(String.valueOf(progress));
+                    ratePercentSign.setVisibility(View.VISIBLE);
+                    rateSeekbar.setProgress(progress);
+                }
+
+                @Override
+                public void onStartTrackingTouch(SeekBar seekBar) {
+
+                }
+
+                @Override
+                public void onStopTrackingTouch(SeekBar seekBar) {
+
+                }
+            });
+
+            ceilingSeekbar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+                @Override
+                public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                    ceilingPercent.setText(String.valueOf(progress));
+                    ceilingPercentSign.setVisibility(View.VISIBLE);
+                }
+
+                @Override
+                public void onStartTrackingTouch(SeekBar seekBar) {
+
+                }
+
+                @Override
+                public void onStopTrackingTouch(SeekBar seekBar) {
+
+                }
+            });
+
+            prioritySeekbar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+                @Override
+                public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                    priorityPercent.setText(String.valueOf(progress));
+                    prioritySeekbar.setProgress(progress);
+                }
+
+                @Override
+                public void onStartTrackingTouch(SeekBar seekBar) {
+
+                }
+
+                @Override
+                public void onStopTrackingTouch(SeekBar seekBar) {
+
+                }
+            });
+
+            updateDeviceQdisc.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    buttonClicked = (Button)v;
+                    v.setAlpha(.5f);
+                    v.setClickable(false);
+                    v.setEnabled(false);
+                    statusText.setVisibility(View.GONE);
+                    buttonClicked.setText("Updating...");
+                    int rate = rateSeekbar.getProgress();
+                    int ceiling = ceilingSeekbar.getProgress();
+                    int priority = prioritySeekbar.getProgress();
+                    DeviceDisc deviceDisc = new DeviceDisc(device.getMacAddress(), rate, ceiling, priority);
+                    devicesManager.setDeviceDisc(deviceDisc, setDeviceDiscCallback);
+                }
+            });
+
+        }
+
+
         final EditText newDeviceName = convertView.findViewById(R.id.new_device_name);
 
         macAddress.setText(device.getMacAddress());
@@ -115,7 +242,6 @@ public class ExpandableListViewAdapter extends BaseExpandableListAdapter {
             @Override
             public void onClick(View v) {
                 buttonClicked = (Button)v;
-                deviceNameEditText = newDeviceName;
                 groupPositionOfDeviceNameChange = groupPosition;
 
                 newName = newDeviceName.getText().toString();
@@ -123,11 +249,13 @@ public class ExpandableListViewAdapter extends BaseExpandableListAdapter {
                 newNameDevice.setName(newName);
                 newNameDevice.setMacAddress(device.getMacAddress());
                 v.setAlpha(.5f);
-                ((Button)v).setText("Setting...");
                 v.setClickable(false);
+                v.setEnabled(false);
+                ((Button)v).setText("Setting...");
                 devicesManager.setDeviceName(newNameDevice, changeDeviceNameCallback);
             }
         });
+
         return convertView;
     }
 
@@ -145,8 +273,8 @@ public class ExpandableListViewAdapter extends BaseExpandableListAdapter {
                 buttonClicked.setAlpha(1f);
                 buttonClicked.setClickable(true);
                 buttonClicked.setText("Set");
-                deviceNameEditText.setText("");
-                listener.onSubmit(groupPositionOfDeviceNameChange, newName);
+                buttonClicked = null;
+                listener.onNameChangeSuccess(groupPositionOfDeviceNameChange, newName);
             } else {
                 Log.i("blahblah", "failure");
             }
@@ -159,6 +287,36 @@ public class ExpandableListViewAdapter extends BaseExpandableListAdapter {
 
         @Override
         public void onError(Throwable e) {
+            Log.i("Error", e.toString());
+        }
+    };
+
+    private BackendServiceSubscriber<Response<String>> setDeviceDiscCallback = new BackendServiceSubscriber<Response<String>>() {
+
+        private Response<String> mResponse;
+        @Override
+        public void onCompleted() {
+            if (mResponse.isSuccessful()) {
+                buttonClicked.setAlpha(1f);
+                buttonClicked.setClickable(true);
+                buttonClicked.setText("Update Device Queueing Discipline");
+                buttonClicked = null;
+                statusText.setVisibility(View.VISIBLE);
+                statusText.setText("Success!");
+            } else {
+                statusText.setText("Failed.");
+                Log.i("blahblah", "failure");
+            }
+        }
+
+        @Override
+        public void onNext(Response<String> stringResponse) {
+            mResponse = stringResponse;
+        }
+
+        @Override
+        public void onError(Throwable e) {
+            statusText.setText("Something went wrong.");
             Log.i("Error", e.toString());
         }
     };

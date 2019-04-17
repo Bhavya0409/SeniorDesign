@@ -149,4 +149,120 @@
             android:text="Set"/>
     </LinearLayout>
 
+    <LinearLayout
+        android:id="@+id/device_queue_disc"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="5dp"
+        android:visibility="gone"
+        android:paddingBottom="5dp"
+        android:paddingLeft="?android:attr/expandableListPreferredChildPaddingLeft"
+        android:paddingRight="?android:attr/expandableListPreferredChildPaddingLeft"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                android:text="Rate - "/>
+
+            <TextView
+                android:id="@+id/rate_percent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"/>
+
+            <TextView
+                android:id="@+id/rate_percent_sign"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                android:text="%"/>
+        </LinearLayout>
+
+        <SeekBar
+            android:id="@+id/rate_seekbar"
+            android:layout_marginBottom="20dp"
+            android:layout_width="match_parent"
+            android:max="100"
+            android:layout_height="wrap_content" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                android:text="Ceiling - "/>
+
+            <TextView
+                android:id="@+id/ceiling_percent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"/>
+
+            <TextView
+                android:id="@+id/ceiling_percent_sign"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                android:text="%"/>
+        </LinearLayout>
+
+        <SeekBar
+            android:id="@+id/ceiling_seekbar"
+            android:layout_marginBottom="20dp"
+            android:layout_width="match_parent"
+            android:max="100"
+            android:layout_height="wrap_content" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                android:text="Priority - "/>
+
+            <TextView
+                android:id="@+id/priority_percent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"/>
+
+        </LinearLayout>
+
+        <SeekBar
+            android:id="@+id/priority_seekbar"
+            android:layout_marginBottom="20dp"
+            android:layout_width="match_parent"
+            android:max="9"
+            android:layout_height="wrap_content" />
+
+        <Button
+            android:id="@+id/update_device_qdisc"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Update Device Queueing Discipline"/>
+
+        <TextView
+            android:id="@+id/status_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:visibility="gone"
+            android:text=""/>
+    </LinearLayout>
+
 </LinearLayout>

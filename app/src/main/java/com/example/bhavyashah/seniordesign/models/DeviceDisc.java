@@ -8,27 +8,10 @@ public class DeviceDisc {
     @SerializedName("ceiling") private int ceiling;
     @SerializedName("priority") private int priority;
 
-    public DeviceDisc() {
-        // Default Constructor
-    }
-
-    public void setMacAddress(String macAddress) {
+    public DeviceDisc(String macAddress, int rate, int ceiling, int priority) {
         this.macAddress = macAddress;
-    }
-
-    public void setRate(int rate) {
-        if (rate >= 0 && rate <= 100) {
-            this.rate = rate;
-        }
-    }
-
-    public void setCeiling(int ceiling) {
-        if (ceiling >= 0 && ceiling <= 100) {
-            this.ceiling = ceiling;
-        }
-    }
-
-    public void setPriority(int priority) {
+        this.rate = rate;
+        this.ceiling = ceiling;
         this.priority = priority;
     }
 }

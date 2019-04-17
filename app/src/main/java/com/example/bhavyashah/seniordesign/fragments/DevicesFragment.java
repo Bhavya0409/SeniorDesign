@@ -61,11 +61,13 @@ public class DevicesFragment extends Fragment implements OnSubmitListener {
     }
 
     @Override
-    public void onSubmit(int groupPosition, String newName) {
+    public void onNameChangeSuccess(int groupPosition, @Nullable String newName) {
         expandableListView.collapseGroup(groupPosition);
-        String oldName = headers.get(groupPosition);
-        headers.set(groupPosition, newName);
-        devices.put(newName, devices.remove(oldName));
+        if (newName != null) {
+            String oldName = headers.get(groupPosition);
+            headers.set(groupPosition, newName);
+            devices.put(newName, devices.remove(oldName));
+        }
     }
 
     private BackendServiceSubscriber<Response<ArrayList<Device>>> devicesCallback = new BackendServiceSubscriber<Response<ArrayList<Device>>>() {
