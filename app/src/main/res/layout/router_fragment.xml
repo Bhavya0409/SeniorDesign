@@ -9,6 +9,7 @@
     <RelativeLayout
         android:id="@+id/queueing_container"
         android:layout_width="match_parent"
+        android:visibility="gone"
         android:layout_height="wrap_content">
 
         <TextView
@@ -34,7 +35,9 @@
     </RelativeLayout>
 
     <RelativeLayout
+        android:id="@+id/rate_container"
         android:layout_width="match_parent"
+        android:visibility="gone"
         android:layout_height="wrap_content">
 
         <TextView
@@ -63,6 +66,7 @@
         android:id="@+id/update_settings"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:visibility="gone"
         android:layout_gravity="center"
         android:layout_marginTop="20dp"
         android:paddingHorizontal="20dp"
@@ -73,7 +77,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:visibility="gone"
         android:layout_marginTop="10dp" />
 
     <TextView

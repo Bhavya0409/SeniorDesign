@@ -1,7 +1,8 @@
 package com.example.bhavyashah.seniordesign.interfaces;
 
-import com.example.bhavyashah.seniordesign.Device;
-import com.example.bhavyashah.seniordesign.QueueDisc;
+import com.example.bhavyashah.seniordesign.models.Device;
+import com.example.bhavyashah.seniordesign.models.DeviceDisc;
+import com.example.bhavyashah.seniordesign.models.QueueDisc;
 
 import java.util.ArrayList;
 
@@ -23,4 +24,10 @@ public interface BackendServices {
 
     @POST("/app/setdisc")
     Observable<Response<String>> setDisc(@Body QueueDisc queueDisc);
+
+    @POST("/app/setdevicedisc")
+    Observable<Response<String>> setDeviceDisc(@Body DeviceDisc deviceDisc);
+
+    @GET("/app/getdisc")
+    Observable<Response<QueueDisc>> getDisc();
 }

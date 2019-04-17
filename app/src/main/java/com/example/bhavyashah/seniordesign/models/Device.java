@@ -1,4 +1,4 @@
-package com.example.bhavyashah.seniordesign;
+package com.example.bhavyashah.seniordesign.models;
 
 import com.google.gson.annotations.SerializedName;
 

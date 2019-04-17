@@ -2,7 +2,7 @@ package com.example.bhavyashah.seniordesign.managers;
 
 import android.content.Context;
 
-import com.example.bhavyashah.seniordesign.QueueDisc;
+import com.example.bhavyashah.seniordesign.models.QueueDisc;
 import com.example.bhavyashah.seniordesign.SeniorDesignApplication;
 import com.example.bhavyashah.seniordesign.interfaces.BackendServiceSubscriber;
 import com.example.bhavyashah.seniordesign.interfaces.BackendServices;
@@ -40,6 +40,30 @@ public class RouterManager {
         });
 
         mServices.setDisc(queueDisc)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(baseObserver);
+    }
+
+    public void getDisc(final BackendServiceSubscriber callback) {
+        BaseObserver baseObserver = new BaseObserver(new BaseObserver.ObserverInterface() {
+            @Override
+            public void next(Response response) {
+                callback.onNext(response);
+            }
+
+            @Override
+            public void error(Throwable throwable) {
+                callback.onError(throwable);
+            }
+
+            @Override
+            public void complete() {
+                callback.onCompleted();
+            }
+        });
+
+        mServices.getDisc()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(baseObserver);

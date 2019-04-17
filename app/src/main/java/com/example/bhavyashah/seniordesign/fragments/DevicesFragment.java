@@ -13,7 +13,7 @@ import android.widget.ExpandableListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.example.bhavyashah.seniordesign.Device;
+import com.example.bhavyashah.seniordesign.models.Device;
 import com.example.bhavyashah.seniordesign.ExpandableListViewAdapter;
 import com.example.bhavyashah.seniordesign.R;
 import com.example.bhavyashah.seniordesign.SeniorDesignApplication;
@@ -29,12 +29,10 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 import retrofit2.Response;
 
 public class DevicesFragment extends Fragment implements OnSubmitListener {
 
-    @BindView(R.id.get_devices_button) Button getDevicesButton;
     @BindView(R.id.devices_error_text) TextView devicesTextView;
     @BindView(R.id.devices_list) ExpandableListView expandableListView;
     @BindView(R.id.progress_bar) ProgressBar progressBar;
@@ -42,8 +40,8 @@ public class DevicesFragment extends Fragment implements OnSubmitListener {
     @Inject DevicesManager devicesManager;
 
     private ExpandableListViewAdapter adapter;
-    private static List<String> headers = new ArrayList<>();
-    private static HashMap<String, Device> devices = new HashMap<>();
+    private List<String> headers = new ArrayList<>();
+    private HashMap<String, Device> devices = new HashMap<>();
 
     @Nullable
     @Override
@@ -57,16 +55,9 @@ public class DevicesFragment extends Fragment implements OnSubmitListener {
         adapter = new ExpandableListViewAdapter(getActivity(), headers, devices, this);
         expandableListView.setAdapter(adapter);
 
-        return view;
-    }
-
-    @OnClick(R.id.get_devices_button)
-    public void onClick(View v) {
-        headers.clear();
-        devices.clear();
-        adapter.notifyDataSetChanged();
-        progressBar.setVisibility(View.VISIBLE);
         devicesManager.getDevices(devicesCallback);
+
+        return view;
     }
 
     @Override
@@ -83,6 +74,7 @@ public class DevicesFragment extends Fragment implements OnSubmitListener {
         @Override
         public void onCompleted() {
             progressBar.setVisibility(View.GONE);
+            expandableListView.setVisibility(View.VISIBLE);
             if (mResponse.isSuccessful()) {
                 ArrayList<Device> devicesResponse = mResponse.body();
                 for (Device device : devicesResponse) {

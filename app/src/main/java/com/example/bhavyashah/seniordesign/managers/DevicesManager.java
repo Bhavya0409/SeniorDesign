@@ -2,10 +2,11 @@ package com.example.bhavyashah.seniordesign.managers;
 
 import android.content.Context;
 
-import com.example.bhavyashah.seniordesign.Device;
+import com.example.bhavyashah.seniordesign.models.Device;
 import com.example.bhavyashah.seniordesign.SeniorDesignApplication;
 import com.example.bhavyashah.seniordesign.interfaces.BackendServiceSubscriber;
 import com.example.bhavyashah.seniordesign.interfaces.BackendServices;
+import com.example.bhavyashah.seniordesign.models.DeviceDisc;
 
 import javax.inject.Inject;
 
@@ -87,6 +88,30 @@ public class DevicesManager {
         });
 
         mServices.changeName(newNameDevice)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(baseObserver);
+    }
+
+    public void setDeviceDisc(DeviceDisc deviceDisc, final BackendServiceSubscriber callback) {
+        BaseObserver baseObserver = new BaseObserver(new BaseObserver.ObserverInterface() {
+            @Override
+            public void next(Response response) {
+                callback.onNext(response);
+            }
+
+            @Override
+            public void error(Throwable throwable) {
+                callback.onError(throwable);
+            }
+
+            @Override
+            public void complete() {
+                callback.onCompleted();
+            }
+        });
+
+        mServices.setDeviceDisc(deviceDisc)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(baseObserver);

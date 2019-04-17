@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.example.bhavyashah.seniordesign.interfaces.BackendServiceSubscriber;
 import com.example.bhavyashah.seniordesign.interfaces.OnSubmitListener;
 import com.example.bhavyashah.seniordesign.managers.DevicesManager;
+import com.example.bhavyashah.seniordesign.models.Device;
 
 import java.util.HashMap;
 import java.util.List;
