@@ -46,7 +46,7 @@ public class RouterFragment extends Fragment {
 
     String qdiscsAbbrev[] = {"pfo", "tbf", "htb"};
     String qdiscs[] = {"Default", "Smooth Traffic", "Random Classful"};
-    String rates[] = {"5", "10", "15", "20", "25"};
+    String rates[] = {"5", "10", "15", "20", "25", "30"};
 
     public static int qdisc = 0;
     private String rate = "";
@@ -115,7 +115,7 @@ public class RouterFragment extends Fragment {
         statusText.setVisibility(View.GONE);
         progressBar.setVisibility(View.VISIBLE);
         String type = (qdisc == 0 || qdisc == 1) ? "ql" : "qf";
-        routerManager.setDisc(setQueueDiscCallback, new QueueDisc(type, qdiscsAbbrev[qdisc], qdisc == 0 ? "" : String.valueOf(rate)));
+        routerManager.setDisc(setQueueDiscCallback, new QueueDisc(type, qdiscsAbbrev[qdisc], qdisc == 0 ? "" : String.valueOf(Integer.parseInt(rate) * 1000)));
     }
 
     private void reset() {
@@ -173,7 +173,13 @@ public class RouterFragment extends Fragment {
                     if (qdisc == 1 || qdisc == 2) {
                         rateContainer.setVisibility(View.VISIBLE);
                     }
-                    rate = queueDisc.getRate();
+
+                    try {
+                        String rateInKbString = queueDisc.getRate();
+                        rate = String.valueOf((Integer.parseInt(rateInKbString)) / 1000);
+                    } catch (Exception e) {
+                        rate = "";
+                    }
 
                     for (int i = 0; i < rates.length; i++) {
                         String rateItem = rates[i];
