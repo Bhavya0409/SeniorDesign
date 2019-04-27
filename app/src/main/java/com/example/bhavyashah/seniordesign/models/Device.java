@@ -70,4 +70,25 @@ public class Device {
     public void setMacAddress(String macAddress) {
         this.macAddress = macAddress;
     }
+
+    public void reset() {
+        this.classRate = -1;
+        this.classCeiling = -1;
+        this.classPriority = -1;
+    }
+
+    @Override
+    public String toString() {
+        return "Device{" +
+                "name='" + name + '\'' +
+                ", macAddress='" + macAddress + '\'' +
+                ", ipAddress='" + ipAddress + '\'' +
+                ", uploadData='" + uploadData + '\'' +
+                ", downloadData='" + downloadData + '\'' +
+                ", lastContact='" + lastContact + '\'' +
+                ", classRate=" + classRate +
+                ", classCeiling=" + classCeiling +
+                ", classPriority=" + classPriority +
+                '}';
+    }
 }

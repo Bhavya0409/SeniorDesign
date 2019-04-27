@@ -254,7 +254,16 @@
             android:id="@+id/update_device_qdisc"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:text="Update Device Queueing Discipline"/>
+
+        <Button
+            android:id="@+id/set_to_default"
+            android:layout_width="wrap_content"
+            android:layout_gravity="center"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/activity_vertical_margin"
+            android:text="Set To Default"/>
 
         <TextView
             android:id="@+id/status_text"

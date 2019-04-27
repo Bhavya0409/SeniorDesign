@@ -70,6 +70,17 @@ public class DevicesFragment extends Fragment implements OnSubmitListener {
         }
     }
 
+    @Override
+    public void onResetDevice(String deviceName) {
+        System.out.println("bhavyawoot on reset device" + deviceName);
+        Device device = devices.get(deviceName);
+        System.out.println("device" + device.toString());
+        if (device != null) {
+            device.reset();
+        }
+        adapter.notifyDataSetChanged();
+    }
+
     private BackendServiceSubscriber<Response<ArrayList<Device>>> devicesCallback = new BackendServiceSubscriber<Response<ArrayList<Device>>>() {
 
         private Response<ArrayList<Device>> mResponse;

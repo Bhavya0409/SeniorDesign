@@ -37,6 +37,7 @@ public class ExpandableListViewAdapter extends BaseExpandableListAdapter {
 
     private String newName = "";
     private Button buttonClicked;
+    private String deviceNameToReset;
     private TextView statusText;
     private int groupPositionOfDeviceNameChange;
 
@@ -128,36 +129,7 @@ public class ExpandableListViewAdapter extends BaseExpandableListAdapter {
             final SeekBar ceilingSeekbar = convertView.findViewById(R.id.ceiling_seekbar);
             final SeekBar prioritySeekbar = convertView.findViewById(R.id.priority_seekbar);
 
-            int classRate = device.getClassRate();
-
-            if (classRate == -1) {
-                ratePercent.setText("Please select a rate as a percentage.");
-                ratePercentSign.setVisibility(View.GONE);
-            } else {
-                ratePercent.setText(String.valueOf(classRate));
-                rateSeekbar.setProgress(classRate);
-            }
-
-            int classCeiling = device.getClassCeiling();
-
-            if (classCeiling == -1) {
-                ceilingPercent.setText("Please select a ceiling as a percentage.");
-                ceilingPercentSign.setVisibility(View.GONE);
-            } else {
-                ceilingPercent.setText(String.valueOf(classCeiling));
-                ceilingSeekbar.setProgress(classCeiling);
-            }
-
-            int classPriority = device.getClassPriority();
-
-            if (classPriority == -1) {
-                priorityPercent.setText("Please select a priority on a scale from 0 - 9.");
-            } else {
-                priorityPercent.setText(String.valueOf(classPriority));
-                prioritySeekbar.setProgress(classPriority);
-            }
-
-            rateSeekbar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            SeekBar.OnSeekBarChangeListener rateSeekbarListener = new SeekBar.OnSeekBarChangeListener() {
                 @Override
                 public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                     ratePercent.setText(String.valueOf(progress));
@@ -174,9 +146,8 @@ public class ExpandableListViewAdapter extends BaseExpandableListAdapter {
                 public void onStopTrackingTouch(SeekBar seekBar) {
 
                 }
-            });
-
-            ceilingSeekbar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            };
+            SeekBar.OnSeekBarChangeListener ceilingSeekbarListener = new SeekBar.OnSeekBarChangeListener() {
                 @Override
                 public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                     ceilingPercent.setText(String.valueOf(progress));
@@ -192,9 +163,8 @@ public class ExpandableListViewAdapter extends BaseExpandableListAdapter {
                 public void onStopTrackingTouch(SeekBar seekBar) {
 
                 }
-            });
-
-            prioritySeekbar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            };
+            SeekBar.OnSeekBarChangeListener prioritySeekbarListener = new SeekBar.OnSeekBarChangeListener() {
                 @Override
                 public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                     priorityPercent.setText(String.valueOf(progress));
@@ -210,7 +180,70 @@ public class ExpandableListViewAdapter extends BaseExpandableListAdapter {
                 public void onStopTrackingTouch(SeekBar seekBar) {
 
                 }
+            };
+
+            rateSeekbar.setOnSeekBarChangeListener(rateSeekbarListener);
+            ceilingSeekbar.setOnSeekBarChangeListener(ceilingSeekbarListener);
+            prioritySeekbar.setOnSeekBarChangeListener(prioritySeekbarListener);
+
+            final Button setToDefaultButton = convertView.findViewById(R.id.set_to_default);
+
+            setToDefaultButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    buttonClicked = (Button) v;
+                    deviceNameToReset = device.getName();
+                    v.setAlpha(.5f);
+                    v.setClickable(false);
+                    v.setEnabled(false);
+                    statusText.setVisibility(View.GONE);
+                    buttonClicked.setText("Resetting...");
+                    DeviceDisc deviceDisc = new DeviceDisc(device.getMacAddress(), -1, -1, -1);
+                    devicesManager.setDeviceDisc(deviceDisc, setDeviceDefaultCallbadk);
+                }
             });
+
+            int classRate = device.getClassRate();
+            int classCeiling = device.getClassCeiling();
+            int classPriority = device.getClassPriority();
+
+            System.out.println("bhavyawoot device rate" + classRate);
+            System.out.println("bhavyawoot device ceiling" + classRate);
+            System.out.println("bhavyawoot device prio" + classPriority);
+
+            if (classRate == -1) {
+                ratePercent.setText("Please select a rate as a percentage.");
+                ratePercentSign.setVisibility(View.GONE);
+                rateSeekbar.setOnSeekBarChangeListener(null);
+                rateSeekbar.setProgress(0);
+                rateSeekbar.setOnSeekBarChangeListener(rateSeekbarListener);
+            } else {
+                ratePercent.setText(String.valueOf(classRate));
+                rateSeekbar.setProgress(classRate);
+            }
+
+
+            if (classCeiling == -1) {
+                ceilingPercent.setText("Please select a ceiling as a percentage.");
+                ceilingPercentSign.setVisibility(View.GONE);
+                ceilingSeekbar.setOnSeekBarChangeListener(null);
+                ceilingSeekbar.setProgress(0);
+                ceilingSeekbar.setOnSeekBarChangeListener(ceilingSeekbarListener);
+            } else {
+                ceilingPercent.setText(String.valueOf(classCeiling));
+                ceilingSeekbar.setProgress(classCeiling);
+            }
+
+
+            if (classPriority == -1) {
+                priorityPercent.setText("Please select a priority on a scale from 0 - 9.");
+                prioritySeekbar.setOnSeekBarChangeListener(null);
+                prioritySeekbar.setProgress(0);
+                prioritySeekbar.setOnSeekBarChangeListener(prioritySeekbarListener);
+            } else {
+                priorityPercent.setText(String.valueOf(classPriority));
+                prioritySeekbar.setProgress(classPriority);
+            }
 
             updateDeviceQdisc.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -299,10 +332,43 @@ public class ExpandableListViewAdapter extends BaseExpandableListAdapter {
             if (mResponse.isSuccessful()) {
                 buttonClicked.setAlpha(1f);
                 buttonClicked.setClickable(true);
+                buttonClicked.setEnabled(true);
                 buttonClicked.setText("Update Device Queueing Discipline");
                 buttonClicked = null;
                 statusText.setVisibility(View.VISIBLE);
                 statusText.setText("Success!");
+            } else {
+                statusText.setText("Failed.");
+                Log.i("blahblah", "failure");
+            }
+        }
+
+        @Override
+        public void onNext(Response<String> stringResponse) {
+            mResponse = stringResponse;
+        }
+
+        @Override
+        public void onError(Throwable e) {
+            statusText.setText("Something went wrong.");
+            Log.i("Error", e.toString());
+        }
+    };
+
+    private BackendServiceSubscriber<Response<String>> setDeviceDefaultCallbadk = new BackendServiceSubscriber<Response<String>>() {
+
+        private Response<String> mResponse;
+        @Override
+        public void onCompleted() {
+            if (mResponse.isSuccessful()) {
+                buttonClicked.setAlpha(1f);
+                buttonClicked.setClickable(true);
+                buttonClicked.setEnabled(true);
+                buttonClicked.setText("Set To Default");
+                buttonClicked = null;
+                statusText.setVisibility(View.VISIBLE);
+                statusText.setText("Success!");
+                listener.onResetDevice(deviceNameToReset);
             } else {
                 statusText.setText("Failed.");
                 Log.i("blahblah", "failure");
