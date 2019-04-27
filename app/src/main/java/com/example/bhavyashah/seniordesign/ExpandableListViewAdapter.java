@@ -207,10 +207,6 @@ public class ExpandableListViewAdapter extends BaseExpandableListAdapter {
             int classCeiling = device.getClassCeiling();
             int classPriority = device.getClassPriority();
 
-            System.out.println("bhavyawoot device rate" + classRate);
-            System.out.println("bhavyawoot device ceiling" + classRate);
-            System.out.println("bhavyawoot device prio" + classPriority);
-
             if (classRate == -1) {
                 ratePercent.setText("Please select a rate as a percentage.");
                 ratePercentSign.setVisibility(View.GONE);

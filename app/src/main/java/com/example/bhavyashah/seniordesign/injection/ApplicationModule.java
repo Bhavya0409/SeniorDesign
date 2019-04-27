@@ -2,6 +2,7 @@ package com.example.bhavyashah.seniordesign.injection;
 
 import com.example.bhavyashah.seniordesign.SeniorDesignApplication;
 import com.example.bhavyashah.seniordesign.managers.DevicesManager;
+import com.example.bhavyashah.seniordesign.managers.LiveDataManager;
 import com.example.bhavyashah.seniordesign.managers.RouterManager;
 
 import javax.inject.Singleton;
@@ -34,5 +35,11 @@ public class ApplicationModule {
     @Singleton
     public RouterManager providesRouterManager() {
         return new RouterManager(mApplication.getApplicationContext());
+    }
+
+    @Provides
+    @Singleton
+    public LiveDataManager providesLiveDataManager() {
+        return new LiveDataManager(mApplication.getApplicationContext());
     }
 }

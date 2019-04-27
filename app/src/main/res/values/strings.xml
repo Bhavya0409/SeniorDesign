@@ -2,6 +2,7 @@
     <string name="app_name">SeniorDesign</string>
     <string name="router">Router</string>
     <string name="devices">Devices</string>
+    <string name="live_data">Live</string>
 
     <string-array name="planets_array">
         <item>Mercury</item>

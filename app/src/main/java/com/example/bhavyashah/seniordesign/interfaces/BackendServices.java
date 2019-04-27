@@ -2,6 +2,7 @@ package com.example.bhavyashah.seniordesign.interfaces;
 
 import com.example.bhavyashah.seniordesign.models.Device;
 import com.example.bhavyashah.seniordesign.models.DeviceDisc;
+import com.example.bhavyashah.seniordesign.models.LiveData;
 import com.example.bhavyashah.seniordesign.models.QueueDisc;
 
 import java.util.ArrayList;
@@ -30,4 +31,7 @@ public interface BackendServices {
 
     @GET("/app/getdisc")
     Observable<Response<QueueDisc>> getDisc();
+
+    @GET("/app/getlivedata")
+    Observable<Response<ArrayList<LiveData>>> getLiveData();
 }

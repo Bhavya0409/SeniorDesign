@@ -10,6 +10,7 @@ import android.widget.FrameLayout;
 
 import com.example.bhavyashah.seniordesign.R;
 import com.example.bhavyashah.seniordesign.fragments.DevicesFragment;
+import com.example.bhavyashah.seniordesign.fragments.LiveDataFragment;
 import com.example.bhavyashah.seniordesign.fragments.RouterFragment;
 
 import butterknife.BindView;
@@ -41,6 +42,9 @@ public class MainActivity extends AppCompatActivity {
                         break;
                     case R.id.navigation_devices:
                         selectedFragment = new DevicesFragment();
+                        break;
+                    case R.id.navigation_live_data:
+                        selectedFragment = new LiveDataFragment();
                         break;
                 }
 

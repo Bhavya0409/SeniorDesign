@@ -8,7 +8,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ExpandableListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -72,9 +71,7 @@ public class DevicesFragment extends Fragment implements OnSubmitListener {
 
     @Override
     public void onResetDevice(String deviceName) {
-        System.out.println("bhavyawoot on reset device" + deviceName);
         Device device = devices.get(deviceName);
-        System.out.println("device" + device.toString());
         if (device != null) {
             device.reset();
         }
