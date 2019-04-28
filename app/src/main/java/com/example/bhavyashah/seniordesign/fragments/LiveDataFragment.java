@@ -20,6 +20,8 @@ import com.example.bhavyashah.seniordesign.managers.LiveDataManager;
 import com.example.bhavyashah.seniordesign.models.LiveData;
 
 import java.util.ArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import javax.inject.Inject;
 
@@ -32,11 +34,15 @@ public class LiveDataFragment extends Fragment {
     @BindView(R.id.progress_bar) ProgressBar progressBar;
     @BindView(R.id.devices_list) ListView listView;
     @BindView(R.id.devices_error_text) TextView devicesTextView;
+    @BindView(R.id.refreshing_text) TextView refreshingText;
 
     @Inject LiveDataManager liveDataManager;
 
     private ArrayList<LiveData> devices = new ArrayList<>();
     private LiveDataAdapter adapter;
+    private boolean refreshedDataOnce = false;
+
+    private Timer timer = new Timer();
 
     @Nullable
     @Override
@@ -48,8 +54,49 @@ public class LiveDataFragment extends Fragment {
         adapter = new LiveDataAdapter(getActivity(), -1, devices);
         listView.setAdapter(adapter);
 
-        liveDataManager.getLiveData(getLiveDataCallback);
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                getActivity().runOnUiThread(new TimerTask() {
+                    @Override
+                    public void run() {
+                        getLiveData();
+                    }
+                });
+            }
+        }, 0, 4000);
         return view;
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        timer.cancel();
+    }
+
+    private void getLiveData() {
+        if (refreshedDataOnce) {
+            refreshingText.setVisibility(View.VISIBLE);
+        }
+        progressBar.setVisibility(View.VISIBLE);
+        liveDataManager.getLiveData(getLiveDataCallback);
+    }
+
+    private void getLiveDataComplete(ArrayList<LiveData> liveDataItems) {
+        refreshingText.setVisibility(View.GONE);
+        progressBar.setVisibility(View.GONE);
+        listView.setVisibility(View.VISIBLE);
+
+        refreshedDataOnce = true;
+
+        devices.clear();
+
+        if (liveDataItems != null) {
+            devices.addAll(liveDataItems);
+            adapter.notifyDataSetChanged();
+        } else {
+            devicesTextView.setText("No devices to show.");
+        }
     }
 
     private BackendServiceSubscriber<Response<ArrayList<LiveData>>> getLiveDataCallback = new BackendServiceSubscriber<Response<ArrayList<LiveData>>>() {
@@ -57,17 +104,9 @@ public class LiveDataFragment extends Fragment {
         private Response<ArrayList<LiveData>> mResponse;
         @Override
         public void onCompleted() {
-            progressBar.setVisibility(View.GONE);
-            listView.setVisibility(View.VISIBLE);
             if (mResponse.isSuccessful()) {
-                devices.clear();
                 ArrayList<LiveData> liveDataItems = mResponse.body();
-                if (liveDataItems != null) {
-                    devices.addAll(liveDataItems);
-                    adapter.notifyDataSetChanged();
-                } else {
-                    devicesTextView.setText("No devices to show.");
-                }
+                getLiveDataComplete(liveDataItems);
             } else {
                 devicesTextView.setText("Couldn't get data. Please try again another time.");
             }
