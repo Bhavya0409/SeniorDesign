@@ -30,6 +30,13 @@ public class Device {
     @SerializedName("class_priority")
     private int classPriority;
 
+    @SerializedName("network_name")
+    private String networkName;
+
+    public String getNetworkName() {
+        return networkName;
+    }
+
     public String getMacAddress() {
         return macAddress;
     }
@@ -37,7 +44,6 @@ public class Device {
     public String getUploadData() {
         return uploadData;
     }
-
 
     public String getIpAddress() {
         return ipAddress;

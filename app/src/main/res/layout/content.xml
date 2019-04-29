@@ -71,6 +71,33 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:text="Network Name:"
+            android:textSize="16sp"
+            android:layout_marginRight="10dp"
+            tools:ignore="RtlHardcoded,RtlSymmetry"/>
+
+        <TextView
+            android:id="@+id/device_network_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:text="No Network Name"
+            tools:ignore="RtlHardcoded,RtlSymmetry" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
+        android:paddingLeft="?android:attr/expandableListPreferredChildPaddingLeft"
+        tools:ignore="RtlHardcoded,RtlSymmetry">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:text="Upload Data:"
             android:textSize="16sp"
             android:layout_marginRight="10dp"
@@ -128,6 +155,7 @@
             tools:ignore="RtlHardcoded,RtlSymmetry"/>
 
     </LinearLayout>
+
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -239,6 +267,7 @@
                 android:id="@+id/priority_percent"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:text="0"
                 android:textSize="20sp"/>
 
         </LinearLayout>
@@ -247,7 +276,7 @@
             android:id="@+id/priority_seekbar"
             android:layout_marginBottom="20dp"
             android:layout_width="match_parent"
-            android:max="9"
+            android:max="10"
             android:layout_height="wrap_content" />
 
         <Button

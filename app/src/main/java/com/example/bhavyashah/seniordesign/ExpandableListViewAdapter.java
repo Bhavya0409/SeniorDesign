@@ -109,6 +109,7 @@ public class ExpandableListViewAdapter extends BaseExpandableListAdapter {
         TextView ipAddress = convertView.findViewById(R.id.device_ip_address);
         TextView ulData = convertView.findViewById(R.id.device_ul_data);
         TextView dlData = convertView.findViewById(R.id.device_dl_data);
+        TextView networkName = convertView.findViewById(R.id.device_network_name);
         statusText = convertView.findViewById(R.id.status_text);
 
         Button changeDeviceName = convertView.findViewById(R.id.change_device_name);
@@ -122,9 +123,6 @@ public class ExpandableListViewAdapter extends BaseExpandableListAdapter {
             final TextView ceilingPercent = convertView.findViewById(R.id.ceiling_percent);
             final TextView priorityPercent = convertView.findViewById(R.id.priority_percent);
 
-            final TextView ratePercentSign = convertView.findViewById(R.id.rate_percent_sign);
-            final TextView ceilingPercentSign = convertView.findViewById(R.id.ceiling_percent_sign);
-
             final SeekBar rateSeekbar = convertView.findViewById(R.id.rate_seekbar);
             final SeekBar ceilingSeekbar = convertView.findViewById(R.id.ceiling_seekbar);
             final SeekBar prioritySeekbar = convertView.findViewById(R.id.priority_seekbar);
@@ -133,8 +131,12 @@ public class ExpandableListViewAdapter extends BaseExpandableListAdapter {
                 @Override
                 public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                     ratePercent.setText(String.valueOf(progress));
-                    ratePercentSign.setVisibility(View.VISIBLE);
                     rateSeekbar.setProgress(progress);
+
+                    int ceiling = ceilingSeekbar.getProgress();
+                    if (ceiling > progress) {
+                        ceilingSeekbar.setProgress(progress);
+                    }
                 }
 
                 @Override
@@ -151,7 +153,12 @@ public class ExpandableListViewAdapter extends BaseExpandableListAdapter {
                 @Override
                 public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                     ceilingPercent.setText(String.valueOf(progress));
-                    ceilingPercentSign.setVisibility(View.VISIBLE);
+                    ceilingSeekbar.setProgress(progress);
+
+                    int rate = rateSeekbar.getProgress();
+                    if (rate > progress) {
+                        rateSeekbar.setProgress(progress);
+                    }
                 }
 
                 @Override
@@ -167,7 +174,7 @@ public class ExpandableListViewAdapter extends BaseExpandableListAdapter {
             SeekBar.OnSeekBarChangeListener prioritySeekbarListener = new SeekBar.OnSeekBarChangeListener() {
                 @Override
                 public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                    priorityPercent.setText(String.valueOf(progress));
+                    priorityPercent.setText(String.valueOf(progress - 5));
                     prioritySeekbar.setProgress(progress);
                 }
 
@@ -208,11 +215,8 @@ public class ExpandableListViewAdapter extends BaseExpandableListAdapter {
             int classPriority = device.getClassPriority();
 
             if (classRate == -1) {
-                ratePercent.setText("Please select a rate as a percentage.");
-                ratePercentSign.setVisibility(View.GONE);
-                rateSeekbar.setOnSeekBarChangeListener(null);
+                ratePercent.setText("0");
                 rateSeekbar.setProgress(0);
-                rateSeekbar.setOnSeekBarChangeListener(rateSeekbarListener);
             } else {
                 ratePercent.setText(String.valueOf(classRate));
                 rateSeekbar.setProgress(classRate);
@@ -220,11 +224,8 @@ public class ExpandableListViewAdapter extends BaseExpandableListAdapter {
 
 
             if (classCeiling == -1) {
-                ceilingPercent.setText("Please select a ceiling as a percentage.");
-                ceilingPercentSign.setVisibility(View.GONE);
-                ceilingSeekbar.setOnSeekBarChangeListener(null);
-                ceilingSeekbar.setProgress(0);
-                ceilingSeekbar.setOnSeekBarChangeListener(ceilingSeekbarListener);
+                ceilingPercent.setText("100");
+                ceilingSeekbar.setProgress(100);
             } else {
                 ceilingPercent.setText(String.valueOf(classCeiling));
                 ceilingSeekbar.setProgress(classCeiling);
@@ -232,10 +233,8 @@ public class ExpandableListViewAdapter extends BaseExpandableListAdapter {
 
 
             if (classPriority == -1) {
-                priorityPercent.setText("Please select a priority on a scale from 0 - 9.");
-                prioritySeekbar.setOnSeekBarChangeListener(null);
-                prioritySeekbar.setProgress(0);
-                prioritySeekbar.setOnSeekBarChangeListener(prioritySeekbarListener);
+                priorityPercent.setText("0");
+                prioritySeekbar.setProgress(5);
             } else {
                 priorityPercent.setText(String.valueOf(classPriority));
                 prioritySeekbar.setProgress(classPriority);
@@ -267,6 +266,9 @@ public class ExpandableListViewAdapter extends BaseExpandableListAdapter {
         ipAddress.setText(device.getIpAddress());
         ulData.setText(device.getUploadData());
         dlData.setText(device.getDownloadData());
+        if (device.getNetworkName().trim().length() != 0) {
+            networkName.setText(device.getNetworkName());
+        }
         changeDeviceName.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
