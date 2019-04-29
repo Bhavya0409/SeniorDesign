@@ -109,7 +109,6 @@ public class ExpandableListViewAdapter extends BaseExpandableListAdapter {
         TextView ipAddress = convertView.findViewById(R.id.device_ip_address);
         TextView ulData = convertView.findViewById(R.id.device_ul_data);
         TextView dlData = convertView.findViewById(R.id.device_dl_data);
-        TextView networkName = convertView.findViewById(R.id.device_network_name);
         statusText = convertView.findViewById(R.id.status_text);
 
         Button changeDeviceName = convertView.findViewById(R.id.change_device_name);
@@ -267,6 +266,10 @@ public class ExpandableListViewAdapter extends BaseExpandableListAdapter {
         ulData.setText(device.getUploadData());
         dlData.setText(device.getDownloadData());
         if (device.getNetworkName().trim().length() != 0) {
+            LinearLayout networkNameContainer = convertView.findViewById(R.id.network_name_container);
+            TextView networkName = convertView.findViewById(R.id.device_network_name);
+
+            networkNameContainer.setVisibility(View.VISIBLE);
             networkName.setText(device.getNetworkName());
         }
         changeDeviceName.setOnClickListener(new View.OnClickListener() {

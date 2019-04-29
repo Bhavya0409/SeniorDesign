@@ -60,10 +60,12 @@
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/network_name_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:paddingTop="5dp"
+        android:visibility="gone"
         android:paddingBottom="5dp"
         android:paddingLeft="?android:attr/expandableListPreferredChildPaddingLeft"
         tools:ignore="RtlHardcoded,RtlSymmetry">
