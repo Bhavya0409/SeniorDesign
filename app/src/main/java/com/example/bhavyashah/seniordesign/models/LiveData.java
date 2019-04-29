@@ -17,11 +17,31 @@ public class LiveData {
     }
 
     public String getUploadSpeed() {
+        if (Integer.parseInt(uploadSpeed) >= 1000) {
+            return String.valueOf(Integer.parseInt(uploadSpeed) / 1000);
+        }
         return uploadSpeed;
     }
 
     public String getDownloadSpeed() {
+        if (Integer.parseInt(downloadSpeed) >= 1000) {
+            return String.valueOf(Integer.parseInt(downloadSpeed) / 1000);
+        }
         return downloadSpeed;
+    }
+
+    public String getDownloadUnits() {
+        if (Integer.parseInt(downloadSpeed) >= 1000) {
+            return "mb/s";
+        }
+        return "kb/s";
+    }
+
+    public String getUploadUnits() {
+        if (Integer.parseInt(uploadSpeed) >= 1000) {
+            return "mb/s";
+        }
+        return "kb/s";
     }
 
     @Override

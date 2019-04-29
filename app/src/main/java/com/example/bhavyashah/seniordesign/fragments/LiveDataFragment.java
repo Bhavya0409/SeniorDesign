@@ -38,6 +38,8 @@ public class LiveDataFragment extends Fragment {
 
     @Inject LiveDataManager liveDataManager;
 
+    private static final int SECONDS_TO_REFRESH = 4;
+
     private ArrayList<LiveData> devices = new ArrayList<>();
     private LiveDataAdapter adapter;
     private boolean refreshedDataOnce = false;
@@ -64,7 +66,7 @@ public class LiveDataFragment extends Fragment {
                     }
                 });
             }
-        }, 0, 4000);
+        }, 0, SECONDS_TO_REFRESH * 1000);
         return view;
     }
 

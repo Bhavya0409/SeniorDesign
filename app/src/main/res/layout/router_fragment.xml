@@ -17,8 +17,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="24sp"
-            android:textColor="@color/stevens_red"
-            android:text="Router Queuing:"
+            android:textColor="@color/colorPrimary"
+            android:text="Router Mode:"
             android:layout_centerHorizontal="true"
             android:layout_marginBottom="16dp"/>
 
@@ -38,6 +38,7 @@
         android:id="@+id/rate_container"
         android:layout_width="match_parent"
         android:visibility="gone"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
         android:layout_height="wrap_content">
 
         <TextView
@@ -45,8 +46,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="24sp"
-            android:textColor="@color/stevens_red"
-            android:text="Rate Selection:"
+            android:textColor="@color/colorPrimary"
+            android:text="Rate Cap (Mb/s):"
             android:layout_centerHorizontal="true"
             android:layout_marginBottom="16dp"/>
 

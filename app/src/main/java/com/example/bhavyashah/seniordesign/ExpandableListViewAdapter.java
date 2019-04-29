@@ -41,6 +41,8 @@ public class ExpandableListViewAdapter extends BaseExpandableListAdapter {
     private TextView statusText;
     private int groupPositionOfDeviceNameChange;
 
+    private static final int PRIORITY_MAX = 6;
+
     public ExpandableListViewAdapter(Context context, List<String> dataHeaders, HashMap<String, Device> devices, OnSubmitListener listener) {
         this.context = context;
         this.dataHeaders = dataHeaders;
@@ -98,6 +100,16 @@ public class ExpandableListViewAdapter extends BaseExpandableListAdapter {
         return convertView;
     }
 
+    private void setPrioritySeekbarText(int value, TextView priorityPercent) {
+        if (value == PRIORITY_MAX) {
+            priorityPercent.setText("MAX");
+        } else if (value == 0) {
+            priorityPercent.setText("MIN");
+        } else {
+            priorityPercent.setText(String.valueOf(value - PRIORITY_MAX / 2));
+        }
+    }
+
     @Override
     public View getChildView(final int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
         final Device device = getChild(groupPosition, childPosition);
@@ -131,11 +143,6 @@ public class ExpandableListViewAdapter extends BaseExpandableListAdapter {
                 public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                     ratePercent.setText(String.valueOf(progress));
                     rateSeekbar.setProgress(progress);
-
-                    int ceiling = ceilingSeekbar.getProgress();
-                    if (ceiling > progress) {
-                        ceilingSeekbar.setProgress(progress);
-                    }
                 }
 
                 @Override
@@ -145,7 +152,10 @@ public class ExpandableListViewAdapter extends BaseExpandableListAdapter {
 
                 @Override
                 public void onStopTrackingTouch(SeekBar seekBar) {
-
+                    int ceiling = ceilingSeekbar.getProgress();
+                    if (ceiling < seekBar.getProgress()) {
+                        ceilingSeekbar.setProgress(seekBar.getProgress());
+                    }
                 }
             };
             SeekBar.OnSeekBarChangeListener ceilingSeekbarListener = new SeekBar.OnSeekBarChangeListener() {
@@ -153,11 +163,6 @@ public class ExpandableListViewAdapter extends BaseExpandableListAdapter {
                 public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                     ceilingPercent.setText(String.valueOf(progress));
                     ceilingSeekbar.setProgress(progress);
-
-                    int rate = rateSeekbar.getProgress();
-                    if (rate > progress) {
-                        rateSeekbar.setProgress(progress);
-                    }
                 }
 
                 @Override
@@ -167,14 +172,16 @@ public class ExpandableListViewAdapter extends BaseExpandableListAdapter {
 
                 @Override
                 public void onStopTrackingTouch(SeekBar seekBar) {
-
+                    int rate = rateSeekbar.getProgress();
+                    if (rate > seekBar.getProgress()) {
+                        rateSeekbar.setProgress(seekBar.getProgress());
+                    }
                 }
             };
             SeekBar.OnSeekBarChangeListener prioritySeekbarListener = new SeekBar.OnSeekBarChangeListener() {
                 @Override
                 public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                    priorityPercent.setText(String.valueOf(progress - 5));
-                    prioritySeekbar.setProgress(progress);
+                    setPrioritySeekbarText(progress, priorityPercent);
                 }
 
                 @Override
@@ -232,11 +239,10 @@ public class ExpandableListViewAdapter extends BaseExpandableListAdapter {
 
 
             if (classPriority == -1) {
-                priorityPercent.setText("0");
-                prioritySeekbar.setProgress(5);
+                prioritySeekbar.setProgress(PRIORITY_MAX / 2);
             } else {
-                priorityPercent.setText(String.valueOf(classPriority));
-                prioritySeekbar.setProgress(classPriority);
+                prioritySeekbar.setProgress(PRIORITY_MAX - classPriority);
+                setPrioritySeekbarText(PRIORITY_MAX - classPriority, priorityPercent);
             }
 
             updateDeviceQdisc.setOnClickListener(new View.OnClickListener() {
@@ -250,7 +256,7 @@ public class ExpandableListViewAdapter extends BaseExpandableListAdapter {
                     buttonClicked.setText("Updating...");
                     int rate = rateSeekbar.getProgress();
                     int ceiling = ceilingSeekbar.getProgress();
-                    int priority = prioritySeekbar.getProgress();
+                    int priority = PRIORITY_MAX - prioritySeekbar.getProgress();
                     DeviceDisc deviceDisc = new DeviceDisc(device.getMacAddress(), rate, ceiling, priority);
                     devicesManager.setDeviceDisc(deviceDisc, setDeviceDiscCallback);
                 }
@@ -306,6 +312,7 @@ public class ExpandableListViewAdapter extends BaseExpandableListAdapter {
             if (mResponse.isSuccessful()) {
                 buttonClicked.setAlpha(1f);
                 buttonClicked.setClickable(true);
+                buttonClicked.setEnabled(true);
                 buttonClicked.setText("Set");
                 buttonClicked = null;
                 listener.onNameChangeSuccess(groupPositionOfDeviceNameChange, newName);

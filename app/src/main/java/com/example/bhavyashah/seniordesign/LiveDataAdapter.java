@@ -32,12 +32,16 @@ public class LiveDataAdapter extends ArrayAdapter<LiveData> {
         TextView deviceNameTextView = rowView.findViewById(R.id.device_name);
         TextView uploadDataTextView = rowView.findViewById(R.id.upload_data);
         TextView downloadDataTextView = rowView.findViewById(R.id.download_data);
+        TextView uploadUnits = rowView.findViewById(R.id.upload_units);
+        TextView downloadUnits = rowView.findViewById(R.id.download_units);
 
         LiveData device = devices.get(position);
 
         deviceNameTextView.setText(device.getName());
         uploadDataTextView.setText(device.getUploadSpeed());
         downloadDataTextView.setText(device.getDownloadSpeed());
+        uploadUnits.setText(device.getUploadUnits());
+        downloadUnits.setText(device.getDownloadUnits());
 
         return rowView;
     }

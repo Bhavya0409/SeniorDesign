@@ -45,8 +45,8 @@ public class RouterFragment extends Fragment {
     @Inject RouterManager routerManager;
 
     String qdiscsAbbrev[] = {"pfo", "tbf", "htb"};
-    String qdiscs[] = {"Default", "Smooth Traffic", "Random Classful"};
-    String rates[] = {"5", "10", "15", "20", "25", "30"};
+    String qdiscs[] = {"Monitor Only", "Router Cap", "Advanced Config"};
+    String rates[] = {"5", "10", "15", "20", "25", "50", "75", "100"};
 
     public static int qdisc = 0;
     private String rate = "";

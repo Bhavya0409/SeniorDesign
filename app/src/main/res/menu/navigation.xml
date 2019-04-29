@@ -6,13 +6,13 @@
         android:icon="@drawable/ic_dashboard_black_24dp"
         android:title="@string/devices" />
 
+    <item android:id="@+id/navigation_live_data"
+        android:icon="@drawable/ic_live_tv_black_24dp"
+        android:title="@string/live_data"/>
+
     <item
         android:id="@+id/navigation_router"
         android:icon="@drawable/ic_home_black_24dp"
         android:title="@string/router" />
-
-    <item android:id="@+id/navigation_live_data"
-        android:icon="@drawable/ic_live_tv_black_24dp"
-        android:title="@string/live_data"/>
 
 </menu>

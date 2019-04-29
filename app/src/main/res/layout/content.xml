@@ -73,7 +73,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Network Name:"
+            android:text="Host Name:"
             android:textSize="16sp"
             android:layout_marginRight="10dp"
             tools:ignore="RtlHardcoded,RtlSymmetry"/>
@@ -83,7 +83,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="16sp"
-            android:text="No Network Name"
             tools:ignore="RtlHardcoded,RtlSymmetry" />
 
     </LinearLayout>
@@ -100,7 +99,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Upload Data:"
+            android:text="Average Upload Rate:"
             android:textSize="16sp"
             android:layout_marginRight="10dp"
             tools:ignore="RtlHardcoded,RtlSymmetry"/>
@@ -135,7 +134,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Download Data:"
+            android:text="Average Download Rate:"
             android:textSize="16sp"
             android:layout_marginRight="10dp"
             tools:ignore="RtlHardcoded,RtlSymmetry"/>
@@ -278,7 +277,7 @@
             android:id="@+id/priority_seekbar"
             android:layout_marginBottom="20dp"
             android:layout_width="match_parent"
-            android:max="10"
+            android:max="6"
             android:layout_height="wrap_content" />
 
         <Button
@@ -286,7 +285,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="Update Device Queueing Discipline"/>
+            android:text="Update Device Parameters"/>
 
         <Button
             android:id="@+id/set_to_default"
