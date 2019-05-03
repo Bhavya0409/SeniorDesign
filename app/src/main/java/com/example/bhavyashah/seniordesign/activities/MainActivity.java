@@ -26,6 +26,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
+        setTitle("Smart Wireless Router");
 
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new RouterFragment()).commit();
 
